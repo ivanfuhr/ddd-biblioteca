@@ -4,6 +4,7 @@ namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades;
 
 
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\PeriodoEmprestimo;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDePagamentoDeMulta;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeRenovacaoDeEmpreestimo;
 
 /**
@@ -11,20 +12,23 @@ use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeRenovacaoDeEmpr
  */
 class FichaEmprestimo
 {
+    /**
+     * @throws ExcecaoDePagamentoDeMulta
+     */
     public function __construct(
-        private readonly int          $id,
-        private readonly Livro        $livro,
-        private readonly Cliente      $cliente,
-        private array                 $periodosEmprestimo = [],
-        private ?ComprovamenteDeMulta $comprovanteDeMulta = null
+        private readonly int                   $id,
+        private readonly Livro                 $livro,
+        private readonly Cliente               $cliente,
+        private array                          $periodosEmprestimo = [],
+        private readonly ?ComprovamenteDeMulta $comprovanteDeMulta = null
     )
     {
-        $periodoEmprestimo = end($this->periodosEmprestimo);
+        if (!empty($this->periodosEmprestimo)) $this->verificarMulta();
+    }
 
-        $toleranceInterval = new \DateInterval('P1D');
-        if (empty($this->comprovanteDeMulta) && $periodoEmprestimo->getDataFim()->add($toleranceInterval) < new \DateTimeImmutable()) {
-            throw new ExcecaoDeRenovacaoDeEmpreestimo('Não é possível renovar o empréstimo, pois o prazo de devolução foi excedido');
-        }
+    public function getComprovanteDeMulta(): ?ComprovamenteDeMulta
+    {
+        return $this->comprovanteDeMulta;
     }
 
     public function getId(): int
@@ -94,4 +98,13 @@ class FichaEmprestimo
         $this->periodosEmprestimo[] = $novoPeriodoEmprestimo;
     }
 
+    private function verificarMulta(): void
+    {
+        $periodoEmprestimo = end($this->periodosEmprestimo);
+        $toleranceInterval = new \DateInterval('P1D');
+
+        if (empty($this->comprovanteDeMulta) && $periodoEmprestimo->getDataFim()->add($toleranceInterval) < new \DateTimeImmutable()) {
+            throw new ExcecaoDePagamentoDeMulta('O empréstimo está com multa pendente de pagamento');
+        }
+    }
 }

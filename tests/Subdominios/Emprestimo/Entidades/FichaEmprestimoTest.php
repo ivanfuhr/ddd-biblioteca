@@ -5,6 +5,8 @@ namespace IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Entidades;
 use DateInterval;
 use DateTimeImmutable;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\FichaEmprestimo;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\PeriodoEmprestimo;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDePagamentoDeMulta;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeRenovacaoDeEmpreestimo;
 use IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures\ClienteFixture;
 use IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures\LivroFixture;
@@ -131,5 +133,27 @@ class FichaEmprestimoTest extends TestCase
         );
 
         $fichaEmprestimo->renovarEmprestimo();
+    }
+
+    public function testCarregarFichaEmprestimoVencidade()
+    {
+        $livro = LivroFixture::getLivroById(1);
+        $cliente = ClienteFixture::getClienteById(1);
+
+        $this->expectExceptionObject(
+            new ExcecaoDePagamentoDeMulta('O empréstimo está com multa pendente de pagamento')
+        );
+
+        new FichaEmprestimo(
+            id: 1,
+            livro: $livro,
+            cliente: $cliente,
+            periodosEmprestimo: [
+                new PeriodoEmprestimo(
+                    (new DateTimeImmutable())->modify('-10 days'),
+                    (new DateTimeImmutable())->modify('-5 days')
+                )
+            ]
+        );
     }
 }

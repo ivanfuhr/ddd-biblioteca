@@ -2,10 +2,14 @@
 
 namespace IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Entidades;
 
+use DateTimeImmutable;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Cliente;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ComprovamenteDeMulta;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\FichaEmprestimo;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\Endereco;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\PeriodoEmprestimo;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeLimiteDeEmprestimo;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDePagamentoDeMulta;
 use IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures\ClienteFixture;
 use IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures\LivroFixture;
 use IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures\TipoClienteFixture;
@@ -117,5 +121,69 @@ class ClienteTest extends TestCase
         );
 
         $cliente->adicionarEmprestimo($fichaEmprestimo2);
+    }
+
+    public function testDevolverLivroComMultaNaoPaga()
+    {
+        $cliente = ClienteFixture::getClienteById(1);
+        $livro = LivroFixture::getLivroById(1);
+
+        $dataVencimento = (new DateTimeImmutable())->modify('-5 days');
+        $fichaEmprestimo = new FichaEmprestimo(
+            id: 1,
+            livro: $livro,
+            cliente: $cliente,
+            periodosEmprestimo: [
+                new PeriodoEmprestimo(
+                    (new DateTimeImmutable())->modify('-10 days'),
+                    $dataVencimento
+                )
+            ],
+            comprovanteDeMulta: new ComprovamenteDeMulta(
+                id: 1,
+                cliente: $cliente,
+                dataVencimento: $dataVencimento
+            )
+        );
+
+        $cliente->adicionarEmprestimo($fichaEmprestimo);
+
+        $this->expectExceptionObject(
+            new ExcecaoDePagamentoDeMulta('Empréstimo com multa não pode ser devolvido')
+        );
+
+        $cliente->devolverEmprestimo($fichaEmprestimo);
+    }
+
+    public function testDevolverLivroComMultaPaga()
+    {
+        $cliente = ClienteFixture::getClienteById(1);
+        $livro = LivroFixture::getLivroById(1);
+
+        $dataVencimento = (new DateTimeImmutable())->modify('-5 days');
+
+        $fichaEmprestimo = new FichaEmprestimo(
+            id: 1,
+            livro: $livro,
+            cliente: $cliente,
+            periodosEmprestimo: [
+                new PeriodoEmprestimo(
+                    (new DateTimeImmutable())->modify('-10 days'),
+                    $dataVencimento
+                )
+            ],
+            comprovanteDeMulta: new ComprovamenteDeMulta(
+                id: 1,
+                cliente: $cliente,
+                dataVencimento: $dataVencimento
+            )
+        );
+
+        $cliente->adicionarEmprestimo($fichaEmprestimo);
+        $fichaEmprestimo->getComprovanteDeMulta()->confirmarPagamento();
+
+        $cliente->devolverEmprestimo($fichaEmprestimo);
+
+        $this->assertEquals([], $cliente->getEmprestimosAtivos());
     }
 }

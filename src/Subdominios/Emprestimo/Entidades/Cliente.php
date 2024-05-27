@@ -3,8 +3,10 @@
 namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades;
 
 use InvalidArgumentException;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums\StatusPagamentoMulta;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\Endereco;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeLimiteDeEmprestimo;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDePagamentoDeMulta;
 use function Sodium\add;
 
 /**
@@ -13,13 +15,13 @@ use function Sodium\add;
 class Cliente
 {
     public function __construct(
-        private readonly int $id,
+        private readonly int    $id,
         private readonly string $nome,
-        private string $email,
-        private string $telefone,
-        private Endereco $endereco,
-        private TipoCliente $tipoCliente,
-        private array $emprestimosAtivos = []
+        private string          $email,
+        private string          $telefone,
+        private Endereco        $endereco,
+        private TipoCliente     $tipoCliente,
+        private array           $emprestimosAtivos = []
     )
     {
     }
@@ -87,7 +89,7 @@ class Cliente
      */
     public function adicionarEmprestimo(FichaEmprestimo $fichaEmprestimo): void
     {
-        if(count($this->emprestimosAtivos) >= $this->tipoCliente->getQuantidadeMaximaLivros())
+        if (count($this->emprestimosAtivos) >= $this->tipoCliente->getQuantidadeMaximaLivros())
             throw new ExcecaoDeLimiteDeEmprestimo('Limite de empréstimos ativos atingido');
 
         $this->emprestimosAtivos[] = $fichaEmprestimo;
@@ -100,12 +102,17 @@ class Cliente
     {
         $emprestimo = array_filter($this->emprestimosAtivos, fn($emprestimo) => $emprestimo->getId() === $fichaEmprestimo->getId());
 
-        if(empty($emprestimo))
+        if (empty($emprestimo))
             throw new InvalidArgumentException('Empréstimo não encontrado');
 
-        if($fichaEmprestimo->getPeriodosEmprestimo()[0]->getDataFim() < new \DateTimeImmutable())
-            throw new InvalidArgumentException('Empréstimo vencido, por favor forneça um comprovante de pagamento para regularização');
+        $emprestimo = array_values($emprestimo)[0];
 
-        unset($this->emprestimosAtivos[array_key_first($emprestimo)]);
+        if (
+            $emprestimo->getComprovanteDeMulta() !== null &&
+            $emprestimo->getComprovanteDeMulta()->getStatusPagamento() !== StatusPagamentoMulta::PAGO
+        )
+            throw new ExcecaoDePagamentoDeMulta('Empréstimo com multa não pode ser devolvido');
+
+        unset($this->emprestimosAtivos[array_search($emprestimo, $this->emprestimosAtivos)]);
     }
 }

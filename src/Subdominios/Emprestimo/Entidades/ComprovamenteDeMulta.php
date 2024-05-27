@@ -15,8 +15,8 @@ class ComprovamenteDeMulta
     public function __construct(
         private readonly int               $id,
         private readonly Cliente           $cliente,
-        private float                      $valorTotal,
         private readonly DateTimeImmutable $dataVencimento,
+        private ?float                     $valorTotal = null,
         private ?DateTimeImmutable         $dataPagamento = null,
         private ?StatusPagamentoMulta      $statusPagamento = StatusPagamentoMulta::AGUARDANDO_PAGAMENTO,
     )
