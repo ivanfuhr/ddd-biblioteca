@@ -2,8 +2,8 @@
 
 namespace IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures;
 
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums\DisponibilidadeLivro;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Livro;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Enums\DisponibilidadeLivro;
 
 class LivroFixture
 {

@@ -3,7 +3,7 @@
 namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades;
 
 use DateTimeImmutable;
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums\StatusPagamentoMulta;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Enums\StatusPagamentoMulta;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDePagamentoDeMulta;
 
 

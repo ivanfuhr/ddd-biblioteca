@@ -1,6 +1,6 @@
 <?php
 
-namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums;
+namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Enums;
 
 enum StatusPagamentoMulta: string
 {

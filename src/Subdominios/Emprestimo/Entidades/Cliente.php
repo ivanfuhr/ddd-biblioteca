@@ -3,11 +3,10 @@
 namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades;
 
 use InvalidArgumentException;
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums\StatusPagamentoMulta;
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\Endereco;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Enums\StatusPagamentoMulta;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeLimiteDeEmprestimo;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDePagamentoDeMulta;
-use function Sodium\add;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\ObjetosDeValor\Endereco;
 
 /**
  * @property FichaEmprestimo[] $emprestimosAtivos

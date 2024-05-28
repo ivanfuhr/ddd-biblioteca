@@ -4,7 +4,7 @@ namespace IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Entidades;
 
 use DateTimeImmutable;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ComprovamenteDeMulta;
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums\StatusPagamentoMulta;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Enums\StatusPagamentoMulta;
 use IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures\ClienteFixture;
 use PHPUnit\Framework\TestCase;
 

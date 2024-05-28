@@ -3,9 +3,9 @@
 namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades;
 
 
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\PeriodoEmprestimo;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDePagamentoDeMulta;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeRenovacaoDeEmpreestimo;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\ObjetosDeValor\PeriodoEmprestimo;
 
 /**
  * @property PeriodoEmprestimo[] $periodosEmprestimo

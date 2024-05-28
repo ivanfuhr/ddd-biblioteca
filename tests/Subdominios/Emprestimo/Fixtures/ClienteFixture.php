@@ -3,7 +3,7 @@
 namespace IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures;
 
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Cliente;
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor\Endereco;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\ObjetosDeValor\Endereco;
 
 class ClienteFixture
 {

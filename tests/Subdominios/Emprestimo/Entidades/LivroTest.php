@@ -2,8 +2,8 @@
 
 namespace IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Entidades;
 
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums\DisponibilidadeLivro;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Livro;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Enums\DisponibilidadeLivro;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeDisponibilidadeDeLivro;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeFilaDeEspera;
 use IvanFuhr\BibliotecaTest\Subdominios\Emprestimo\Fixtures\ClienteFixture;

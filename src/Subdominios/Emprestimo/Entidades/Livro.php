@@ -2,7 +2,7 @@
 
 namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades;
 
-use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\Enums\DisponibilidadeLivro;
+use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Enums\DisponibilidadeLivro;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeDisponibilidadeDeLivro;
 use IvanFuhr\Biblioteca\Subdominios\Emprestimo\Excecoes\ExcecaoDeFilaDeEspera;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\Entidades\ObjetosDeValor;
+namespace IvanFuhr\Biblioteca\Subdominios\Emprestimo\ObjetosDeValor;
 
 readonly class Endereco
 {
